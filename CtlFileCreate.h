@@ -38,8 +38,8 @@ typedef unsigned char       BOOL;
 typedef struct
 {
     UINT8 szSrcNumber[50];
-	UINT8 szDstNumber[50];
-	UINT8 szDataStartTime[50]; 
+    UINT8 szDstNumber[50];
+    UINT8 szDataStartTime[50]; 
     UINT8 szDataEndTime[50]; 
 } T_SrcFileContent;
 
