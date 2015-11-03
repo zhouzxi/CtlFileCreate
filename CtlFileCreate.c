@@ -36,7 +36,7 @@ INT32 main()
 {
     ReadCtlFile();    // 获取控制文件存放路径、控制文件全路径名及文件内容字段值
 	
-	  ReadSrcFileAndWriteCtlFile();    // 扫描源文件目录, 并写控制文件
+    ReadSrcFileAndWriteCtlFile();    // 扫描源文件目录, 并写控制文件
 
     return 0;
 }
@@ -67,7 +67,7 @@ void ReadCtlFile(void)
 	
     snprintf(g_szCtlFileDir, sizeof(g_szCtlFileDir)-1, "%s/zhouzhaoxiong/zzx/CtlFileCreate/CtlFile", pszHomePath);  // 控制文件存放目录
 	
-	  snprintf(g_szCtlFileName, sizeof(g_szCtlFileName)-1, "%s/CtlFile.txt", g_szCtlFileDir);  // 控制文件全路径名
+    snprintf(g_szCtlFileName, sizeof(g_szCtlFileName)-1, "%s/CtlFile.txt", g_szCtlFileDir);  // 控制文件全路径名
 	
     fpCtlFile = fopen(g_szCtlFileName, "r");
     if (fpCtlFile != NULL)
@@ -98,7 +98,7 @@ void ReadCtlFile(void)
         fclose(fpCtlFile);
         fpCtlFile = NULL;
 		
-		    printf("ReadCtlFile: DataStartTime=%s, DataEndTime=%s, RecordsSum=%d\n", g_szDataStartTime, g_szDataEndTime, g_iRecordsSum);
+	printf("ReadCtlFile: DataStartTime=%s, DataEndTime=%s, RecordsSum=%d\n", g_szDataStartTime, g_szDataEndTime, g_iRecordsSum);
     }
 }
 
@@ -119,7 +119,7 @@ void ReadSrcFileAndWriteCtlFile(void)
     UINT8  szCommandBuf[500]  = {0}; 
     UINT8  szSrcFile[500]     = {0}; 
 	
-	  DIR            *pDir    = NULL;
+    DIR            *pDir    = NULL;
     struct dirent  *pDirent = NULL;
 	
     pszHomePath = getenv("HOME");
@@ -132,7 +132,7 @@ void ReadSrcFileAndWriteCtlFile(void)
 
     snprintf(g_szSourceBakDir, sizeof(g_szSourceBakDir)-1, "%s/zhouzhaoxiong/zzx/CtlFileCreate/SrcFile_bak", pszHomePath);  // 源文件备份目录
 	
-	  while (1)
+    while (1)
     {   
         pDir = opendir(g_szSourceDir);
         if (NULL == pDir)
@@ -178,17 +178,17 @@ void ReadSrcFileAndWriteCtlFile(void)
 void GetSrcFileContentAndWriteCtlFile(UINT8 *pszSrcFileName)
 {
     FILE  *fp                  = NULL;
-	  UINT8  szContentLine[1024] = {0};
+    UINT8  szContentLine[1024] = {0};
 	
-	  T_SrcFileContent tSrcFileContent = {0};
+    T_SrcFileContent tSrcFileContent = {0};
 	
     if (pszSrcFileName == NULL)
-	  {
-	      printf("GetSrcFileContentAndWriteCtlFile: pDir is NULL!\n");
-		    return;
-	  }
+    {
+        printf("GetSrcFileContentAndWriteCtlFile: pDir is NULL!\n");
+	return;
+    }
 	
-  	if ((fp = fopen(pszSrcFileName, "r")) == NULL)  // 只读方式打开
+    if ((fp = fopen(pszSrcFileName, "r")) == NULL)  // 只读方式打开
     {
         printf("GetSrcFileContentAndWriteCtlFile: open src file failed!\n");
         return; 
@@ -208,7 +208,7 @@ void GetSrcFileContentAndWriteCtlFile(UINT8 *pszSrcFileName)
                 printf("GetSrcFileContentAndWriteCtlFile: get content line: %s\n", szContentLine);
             }
 			
-			      RemoveLineEnd(szContentLine); // 去掉字符串后面的回车换行符
+	    RemoveLineEnd(szContentLine); // 去掉字符串后面的回车换行符
 
             if (strlen(szContentLine) == 0)   // 如果为空行, 则继续处理下一条
             {
@@ -216,13 +216,13 @@ void GetSrcFileContentAndWriteCtlFile(UINT8 *pszSrcFileName)
                 continue;
             }
 			
-		      	GetSrcFileFieldValue(szContentLine, &tSrcFileContent);   // 获取一条记录中各个字段的值
+	    GetSrcFileFieldValue(szContentLine, &tSrcFileContent);   // 获取一条记录中各个字段的值
 
             memset(szContentLine, 0x00, sizeof(szContentLine));
             GetCtlFileContentAndWrite(&tSrcFileContent, szContentLine); // 组装写入控制文件中的内容
 			
-			      WriteToCtlFile(szContentLine);    // 将内容写到控制文件中
-		    }
+	    WriteToCtlFile(szContentLine);    // 将内容写到控制文件中
+	}
 
         fclose(fp);
         fp = NULL;
@@ -245,12 +245,12 @@ void GetCtlFileContentAndWrite(T_SrcFileContent *ptSrcFileContent, UINT8 *pszCon
     UINT8  szContentLine[500] = {0};
     
     if (ptSrcFileContent == NULL || pszContentBuffer == NULL)
-  	{
-	      printf("GetCtlFileContentAndWrite: ptSrcFileContent or pszContentBuffer is NULL!\n");
-		    return;
-	  }
+    {
+        printf("GetCtlFileContentAndWrite: ptSrcFileContent or pszContentBuffer is NULL!\n");
+        return;
+    }
 	
-  	// 根据值的大小对g_szDataStartTime进行赋值
+    // 根据值的大小对g_szDataStartTime进行赋值
     if (strlen(g_szDataStartTime) == 0)   // 当天第一条
     {
         strncpy(g_szDataStartTime, ptSrcFileContent->szDataStartTime, strlen(ptSrcFileContent->szDataStartTime));
@@ -308,10 +308,10 @@ void GetCtlFileContentAndWrite(T_SrcFileContent *ptSrcFileContent, UINT8 *pszCon
 void GetSrcFileFieldValue(UINT8 *pszContentLine, T_SrcFileContent *ptSrcFileContent)
 {
     if (pszContentLine == NULL || ptSrcFileContent == NULL)
-	  {
-	      printf("GetSrcFileFieldValue: ContentLine or SrcFileContent is NULL!\n");
-	    	return;
-  	}
+    {
+        printf("GetSrcFileFieldValue: ContentLine or SrcFileContent is NULL!\n");
+	return;
+    }
         
     // 获取源号码
     if (TRUE != GetValueFromStr(1, MML_STR_TYPE, pszContentLine, ptSrcFileContent->szSrcNumber, '|', sizeof(ptSrcFileContent->szSrcNumber)))
@@ -327,14 +327,14 @@ void GetSrcFileFieldValue(UINT8 *pszContentLine, T_SrcFileContent *ptSrcFileCont
         return;
     }
 	
-	  // 获取开始时间
+    // 获取开始时间
     if (TRUE != GetValueFromStr(3, MML_STR_TYPE, pszContentLine, ptSrcFileContent->szDataStartTime, '|', sizeof(ptSrcFileContent->szDataStartTime)))
     {
         printf("GetSrcFileFieldValue: exec GetValueFromStr to get szDataStartTime failed!\n");
         return;
     }
 	
-	  // 获取结束时间
+    // 获取结束时间
     if (TRUE != GetValueFromStr(4, MML_STR_TYPE, pszContentLine, ptSrcFileContent->szDataEndTime, '|', sizeof(ptSrcFileContent->szDataEndTime)))
     {
         printf("GetSrcFileFieldValue: exec GetValueFromStr to get szDataEndTime failed!\n");
@@ -486,23 +486,23 @@ void RemoveLineEnd(UINT8 *pszStr)
 {
     UINT32  iStrLen = 0;
 	
-	  if (pszStr == NULL)
-	  {
-	      printf("RemoveLineEnd: pszStr is NULL!\n");
-		    return;
-  	}
+    if (pszStr == NULL)
+    {
+        printf("RemoveLineEnd: pszStr is NULL!\n");
+	return;
+    }
 
     iStrLen = strlen(pszStr);
     while (iStrLen > 0)
     {
         if (pszStr[iStrLen-1] == '\n' || pszStr[iStrLen-1] == '\r')
-		    {
-		        pszStr[iStrLen-1] = '\0';
-		    }
+	{
+            pszStr[iStrLen-1] = '\0';
+	}
         else
-		    {
+	{
             break;
-	      }
+	}
 
         iStrLen --;
     }
